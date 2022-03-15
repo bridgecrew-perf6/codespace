@@ -9,8 +9,8 @@ const NavBar = () => {
             <div className="h-full p-4 mx-auto container flex items-center md:px-0 justify-center md:justify-start">
                 <div className="flex items-center">
                     <FullLogo height={48} />
-                    <span className="hidden md:block ml-4 text-neutral-500 font-medium tracking-wide text-xl">
-                        CODE SPACE
+                    <span className="hidden md:block ml-4 text-neutral-500 font-medium tracking-wide text-xl border-l-2 border-neutral-700 pl-3">
+                        SPACE
                     </span>
                 </div>
 

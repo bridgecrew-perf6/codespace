@@ -3,7 +3,7 @@ import {ReactComponent as DefaultThumbnail} from "../assets/codespace-logo-mono.
 
 const CodeCard = ({author="@goodbits",codeTitle="Untitled",likeCount = 0, commentCount = 0}) => {
     return (
-        <div className="bg-neutral-800 hover:scale-[1.02] transition-all duration-100 cursor-pointer">
+        <div className="bg-neutral-800 hover:scale-[1.02] transition-all duration-100 cursor-pointer rounded overflow-hidden">
             <div className="">
                 <div className="flex items-center justify-center py-16 bg-neutral-dark">
                     <DefaultThumbnail height={48} className="fill-neutral-900" />

@@ -1,7 +1,7 @@
 import Editor from "@monaco-editor/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { emmetHTML, emmetCSS } from "emmet-monaco-es";
-import { Maximize2, Play } from "react-feather";
+import { Maximize2, Minimize2, Play } from "react-feather";
 import Loader from "../utility/loader";
 import { htmlTemlplate } from "../utility/template";
 import { ReactComponent as JsIcon } from "../assets/js.svg";
@@ -9,7 +9,7 @@ import { ReactComponent as HTMLIcon } from "../assets/html.svg";
 import { ReactComponent as CssIcon } from "../assets/css.svg";
 import PanelGroup from "react-panelgroup/lib/PanelGroup";
 
-const CodeEditor = () => {
+const CodeEditor = ({ setNavVisible, navVisible }) => {
     const [activeTab, setActiveTab] = useState("html");
     const [editorInstance, setEditorInstance] = useState(null);
     const [resizing, setResizing] = useState(false);
@@ -17,7 +17,6 @@ const CodeEditor = () => {
     const cssModelRef = useRef();
     const jsModelRef = useRef();
     const outputFrame = useRef();
-
     const handleOnMount = (editor, monaco) => {
         let themeData = require("./onedarkpro.json");
         monaco.editor.defineTheme("onedarkpro", themeData);
@@ -35,10 +34,7 @@ const CodeEditor = () => {
         let htmlCode = htmlModelRef.current.getValue();
         let cssCode = cssModelRef.current.getValue();
         let jsCode = jsModelRef.current.getValue();
-
-        console.log(htmlCode, cssCode, jsCode);
-        
-        let code = `${htmlCode}<style>${cssCode}</style><script>${jsCode}</script>` ;
+        let code = `${htmlCode}<style>${cssCode}</style><script>${jsCode}</script>`;
         outputFrame.current.contentWindow.document.body.innerHTML = code;
     }
 
@@ -85,12 +81,16 @@ const CodeEditor = () => {
                             JS
                         </div>
                         <div className="flex-1"></div>
-                        <div className="space-x-2 flex p-1.5">
+                        <div className="flex p-1.5">
                             <button className="btn-secondary px-2" onClick={run}>
                                 <Play height={18} width={18} />
                             </button>
-                            <button className="btn-secondary px-2">
-                                <Maximize2 height={18} width={18} />
+                            <button className="btn-secondary px-2" onClick={() => setNavVisible((v) => !v)}>
+                                {navVisible ? (
+                                    <Maximize2 height={18} width={18} />
+                                ) : (
+                                    <Minimize2 height={18} width={18} />
+                                )}
                             </button>
                         </div>
                     </div>
@@ -120,6 +120,14 @@ const CodeEditor = () => {
                             : "block flex-1 bg-white w-full h-full"
                     }
                 ></iframe>
+                {/* <PanelGroup
+                    direction="column"
+                    borderColor="grey"
+                    onResizeStart={() => setResizing(true)}
+                    onResizeEnd={() => setResizing(false)}
+                >
+                    <div></div>
+                </PanelGroup> */}
             </div>
         </PanelGroup>
     );

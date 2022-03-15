@@ -27,4 +27,8 @@
     .btn-secondary {
         @apply text-neutral-500 cursor-pointer p-1.5 flex items-center justify-center font-medium rounded hover:bg-neutral-800 hover:text-neutral-300 transition-all duration-100
     }
+
+    .custom-input {
+        @apply h-12 w-full bg-neutral-800 p-4 pl-12 text-neutral-300 outline-none rounded
+    }
 }
