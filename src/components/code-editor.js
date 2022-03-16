@@ -125,6 +125,7 @@ const CodeEditor = ({ setNavVisible, navVisible, setCode,code }) => {
                             ? "block flex-1 bg-white w-full h-full pointer-events-none"
                             : "block flex-1 bg-white w-full h-full"
                     }
+                    sandbox="allow-scripts allow-same-origin allow-forms"
                 ></iframe>
             </div>
         </PanelGroup>

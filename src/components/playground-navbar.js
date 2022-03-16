@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import Avatar from "./avatar";
 import { useAuth } from "../contexts/auth-context";
 import { Link } from "react-router-dom";
-import { LOGIN_ROUTE } from "../routes";
+import { HOME_ROUTE, LOGIN_ROUTE } from "../routes";
 
 const PlaygroundNavBar = ({ handleSaveCode, codeTitle, setCodeTitle, timestamp = "0" }) => {
     const { currentUser, signout } = useAuth();
@@ -15,7 +15,9 @@ const PlaygroundNavBar = ({ handleSaveCode, codeTitle, setCodeTitle, timestamp =
         <nav className="fixed top-0 left-0 z-10 w-full h-20 bg-neutral-900 px-4">
             <div className="h-full p-4 mx-auto flex items-center md:px-0 justify-center md:justify-start space-x-4">
                 <div className="flex items-center">
-                    <FullLogo height={48} />
+                    <Link to={HOME_ROUTE}>
+                        <FullLogo height={48} />
+                    </Link>
                     <div className="hidden md:block ml-4 border-l-2 border-neutral-700 pl-3">
                         <input
                             defaultValue={codeTitle}
@@ -27,6 +29,7 @@ const PlaygroundNavBar = ({ handleSaveCode, codeTitle, setCodeTitle, timestamp =
                             className="text-neutral-100 bg-transparent outline-none font-medium tracking-wide text-xl leading-none"
                             required
                             form="saveForm"
+                            disabled={currentUser?false:true}
                         />
                         <div className="text-neutral-500 text-sm">
                             Last modified {moment(new Date(parseInt(timestamp) || 0)).fromNow()}
