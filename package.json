@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.6",
     "@monaco-editor/react": "^4.3.1",
     "@testing-library/jest-dom": "^5.16.2",
@@ -11,6 +12,8 @@
     "copy-to-clipboard": "^3.3.1",
     "emmet-monaco-es": "^5.1.0",
     "firebase": "^9.4.1",
+    "moment": "^2.29.1",
+    "node-gzip": "^1.1.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-feather": "^2.0.9",

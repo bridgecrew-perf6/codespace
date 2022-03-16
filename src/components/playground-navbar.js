@@ -1,11 +1,15 @@
 import { ReactComponent as FullLogo } from "../assets/codespace-logo.svg";
-import { Heart, MessageSquare, Save, Share2, UserPlus } from "react-feather";
-import { useState } from "react";
+import { LogIn, Save, Share2 } from "react-feather";
+import moment from "moment";
 import copy from "copy-to-clipboard";
 import { toast } from "react-toastify";
+import Avatar from "./avatar";
+import { useAuth } from "../contexts/auth-context";
+import { Link } from "react-router-dom";
+import { LOGIN_ROUTE } from "../routes";
 
-const PlaygroundNavBar = ({setCommentSectionOpen}) => {
-    const [codeTitle, setCodeTitle] = useState("Untitled");
+const PlaygroundNavBar = ({ handleSaveCode, codeTitle, setCodeTitle, timestamp = "0" }) => {
+    const { currentUser, signout } = useAuth();
 
     return (
         <nav className="fixed top-0 left-0 z-10 w-full h-20 bg-neutral-900 px-4">
@@ -14,54 +18,81 @@ const PlaygroundNavBar = ({setCommentSectionOpen}) => {
                     <FullLogo height={48} />
                     <div className="hidden md:block ml-4 border-l-2 border-neutral-700 pl-3">
                         <input
-                            value={codeTitle}
+                            defaultValue={codeTitle}
                             onChange={(e) => setCodeTitle(e.target.value)}
                             onBlur={(e) => {
-                                e.target.value ? setCodeTitle(e.target.value) : setCodeTitle("Untitled");
+                                e.target.value ? setCodeTitle(e.target.value.trim()) : setCodeTitle("Untitled");
                             }}
+                            placeholder="My Awesome Code"
                             className="text-neutral-100 bg-transparent outline-none font-medium tracking-wide text-xl leading-none"
-                        ></input>
-                        <div className="text-sm leading-none text-neutral-500">@goodBits</div>
+                            required
+                            form="saveForm"
+                        />
+                        <div className="text-neutral-500 text-sm">
+                            Last modified {moment(new Date(parseInt(timestamp) || 0)).fromNow()}
+                        </div>
                     </div>
                 </div>
 
                 <div className="flex-1"></div>
 
-                <div className="flex text-neutral-500 space-x-1 font-medium">
-                    <div className="btn-secondary">
-                        <Save height={20} />
-                        <span className="ml-1">Save</span>
-                    </div>
-                    {/* <div className="btn-secondary">
-                        <UserPlus height={20} />
-                        <span className="ml-1">Follow</span>
-                    </div> */}
-                    <div className="btn-secondary">
-                        <Heart height={20} />
-                        <span className="ml-1">120</span>
-                    </div>
-                    <div className="btn-secondary" onClick={()=>setCommentSectionOpen(true)}>
-                        <MessageSquare height={20} />
-                        <span className="ml-1">30</span>
-                    </div>
-                    <button
-                        className="btn-secondary"
-                        onClick={() => {
-                            copy(window.location.href);
-                            toast.success("Link Copied to Clipboard", {
-                                position: "bottom-center",
-                                autoClose: 2000,
-                                theme:"dark"
-                            });
-                        }}
-                    >
-                        <Share2 height={20} />
-                    </button>
-                </div>
+                {currentUser && (
+                    <div className="flex text-neutral-500 space-x-1 font-medium">
+                        <form
+                            id="saveForm"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSaveCode();
+                            }}
+                        >
+                            <button className="btn-secondary p-3">
+                                <Save height={20} />
+                                <span className="ml-1">Save</span>
+                            </button>
+                        </form>
 
-                <div>
-                    <div className="h-12 w-12 rounded-full bg-neutral-700"></div>
-                </div>
+                        <button
+                            className="btn-secondary p-3"
+                            onClick={() => {
+                                copy(window.location.href);
+                                toast.success("Link Copied to Clipboard", {
+                                    position: "bottom-right",
+                                    autoClose: 2000,
+                                    theme: "dark",
+                                });
+                            }}
+                        >
+                            <Share2 height={20} />
+                            <span className="ml-1">Share</span>
+                        </button>
+                        <Avatar signout={signout} currentUser={currentUser} />
+                    </div>
+                )}
+
+                {!currentUser && (
+                    <div className="flex text-neutral-500 space-x-1 font-medium">
+                        <button
+                            className="btn-secondary p-3"
+                            onClick={() => {
+                                copy(window.location.href);
+                                toast.success("Link Copied to Clipboard", {
+                                    position: "bottom-right",
+                                    autoClose: 2000,
+                                    theme: "dark",
+                                });
+                            }}
+                        >
+                            <Share2 height={20} />
+                            <span className="ml-1">Share</span>
+                        </button>
+                        <Link to={LOGIN_ROUTE}>
+                            <button className="btn-secondary p-3">
+                                <LogIn height={20} />
+                                <span className="ml-1">Login</span>
+                            </button>
+                        </Link>
+                    </div>
+                )}
             </div>
         </nav>
     );

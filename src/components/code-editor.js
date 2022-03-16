@@ -3,13 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import { emmetHTML, emmetCSS } from "emmet-monaco-es";
 import { Maximize2, Minimize2, Play } from "react-feather";
 import Loader from "../utility/loader";
-import { htmlTemlplate } from "../utility/template";
 import { ReactComponent as JsIcon } from "../assets/js.svg";
 import { ReactComponent as HTMLIcon } from "../assets/html.svg";
 import { ReactComponent as CssIcon } from "../assets/css.svg";
 import PanelGroup from "react-panelgroup/lib/PanelGroup";
 
-const CodeEditor = ({ setNavVisible, navVisible }) => {
+const CodeEditor = ({ setNavVisible, navVisible, setCode,code }) => {
     const [activeTab, setActiveTab] = useState("html");
     const [editorInstance, setEditorInstance] = useState(null);
     const [resizing, setResizing] = useState(false);
@@ -23,19 +22,26 @@ const CodeEditor = ({ setNavVisible, navVisible }) => {
         monaco.editor.setTheme("onedarkpro");
         emmetHTML(monaco);
         emmetCSS(monaco);
-        htmlModelRef.current = monaco.editor.createModel(htmlTemlplate, "html");
-        cssModelRef.current = monaco.editor.createModel("/* CSS */", "css");
-        jsModelRef.current = monaco.editor.createModel("// JS", "javascript");
+        htmlModelRef.current = monaco.editor.createModel(code.html, "html");
+        cssModelRef.current = monaco.editor.createModel(code.css, "css");
+        jsModelRef.current = monaco.editor.createModel(code.js, "javascript");
         editor.setModel(htmlModelRef.current);
         setEditorInstance(editor);
+        run();
     };
 
     function run() {
         let htmlCode = htmlModelRef.current.getValue();
         let cssCode = cssModelRef.current.getValue();
         let jsCode = jsModelRef.current.getValue();
-        let code = `${htmlCode}<style>${cssCode}</style><script>${jsCode}</script>`;
-        outputFrame.current.contentWindow.document.body.innerHTML = code;
+        setCode({
+            ...code,
+            html:htmlCode,
+            css:cssCode,
+            js:jsCode
+        });
+        outputFrame.current.src = "data:text/html;charset=utf-8," + escape(`${htmlCode}<style>${cssCode}</style><script>${jsCode}</script>`);
+    
     }
 
     function changeActiveTab(tab) {
@@ -120,14 +126,6 @@ const CodeEditor = ({ setNavVisible, navVisible }) => {
                             : "block flex-1 bg-white w-full h-full"
                     }
                 ></iframe>
-                {/* <PanelGroup
-                    direction="column"
-                    borderColor="grey"
-                    onResizeStart={() => setResizing(true)}
-                    onResizeEnd={() => setResizing(false)}
-                >
-                    <div></div>
-                </PanelGroup> */}
             </div>
         </PanelGroup>
     );
